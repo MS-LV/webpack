@@ -1,0 +1,21 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    animation: load 5s ease-in-out 0s alternate infinite;
+}
+
+@keyframes load {
+    from {
+        font-size: 12px;
+        background-color: yellow;
+    }
+
+    to {
+        background-color: green;
+        font-size: 44px;
+    }
+}

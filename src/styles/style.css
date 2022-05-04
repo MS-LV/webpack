@@ -1,0 +1,9 @@
+h1 {
+    text-align: center;
+    text-transform: uppercase;
+    color: green;
+}
+
+.container {
+    margin: 3em 0px 0px;
+}

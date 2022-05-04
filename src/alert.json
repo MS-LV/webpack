@@ -1,0 +1,22 @@
+[
+    {
+        "name": "jamoliddin",
+        "age": 32,
+        "young": true
+    },
+    {
+        "name": "jaloliddin",
+        "age": 22,
+        "young": false
+    },
+    {
+        "name": "Akbar",
+        "age": 22,
+        "young": false
+    },
+    {
+        "name": "Akbar",
+        "age": 22,
+        "young": false
+    }
+]
