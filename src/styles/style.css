@@ -1,9 +1,31 @@
+@import "~normalize.css";
+@import 'roboto.css';
+
 h1 {
     text-align: center;
     text-transform: uppercase;
     color: green;
+    font-family: 'Roboto';
 }
 
 .container {
     margin: 3em 0px 0px;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+}
+
+div.logo {
+    width: 1000px;
+    height: 500px;
+    border: 2px solid black;
+    background-image: url('../img/02.png');
+    background-size: cover;
+    background-position: center;
+}
+
+body {
+    background-image: url('../img/01.jpg');
 }
