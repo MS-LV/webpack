@@ -4,18 +4,17 @@
     box-sizing: border-box;
 }
 
-body {
-    animation: load 5s ease-in-out 0s alternate infinite;
-}
+body {}
 
 @keyframes load {
     from {
         font-size: 12px;
-        background-color: yellow;
+        background-color: pink;
     }
 
     to {
         background-color: green;
         font-size: 44px;
+        /* You changed me !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
     }
 }
