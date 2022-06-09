@@ -5,8 +5,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isDev = process.env.NODE_ENV == 'development';
+const isStatus = process.env.NODE_ENV == 'status';
 const isProduct = !isDev;
 const cssLoaders = (extra) => {
     const loader = [
@@ -18,6 +20,16 @@ const cssLoaders = (extra) => {
         loader.push(extra);
     }
     return loader
+}
+const jsLoaders = () => {
+    const loaders = [{
+        loader: 'babel-loader',
+        options: babelOptions()
+    }]
+    if (isDev) {
+        loaders.push('eslint-loader')
+    }
+    return loaders
 }
 const babelOptions = (preset) => {
     const opts = {
@@ -42,6 +54,32 @@ const optimization = () => {
         ]
     }
     return config
+}
+const plugins = () => {
+    const base = [
+        new HTMLWebpackPlugin({
+            //title: "my webpack Project",
+            template: './src/indexOne.html',
+            minify: {
+                collapseWhitespace: isProduct
+            }
+        }),
+        new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: path.resolve(__dirname, 'src/img/favicon.jpg'), to: path.resolve(__dirname, 'dist') },
+                //{ from: path.resolve(__dirname, 'src/styles/style.css'), to: path.resolve(__dirname, 'dist') } //<< < можно выкладиват несколько файлов
+            ],
+        }),
+        new MiniCssExtractPlugin({
+            //filename: '[name].[chunkhash].css'
+            filename: filename('css')
+        })
+    ];
+    if (isStatus) {
+        base.push(new BundleAnalyzerPlugin()) //? Показат статус
+    }
+    return base;
 }
 const filename = (ext) => isDev ? `[name].${ext}` : `[name].[hash].${ext}`
 module.exports = {
@@ -71,26 +109,7 @@ module.exports = {
             '@models': path.resolve(__dirname, 'src')
         } */
     },
-    plugins: [
-        new HTMLWebpackPlugin({
-            //title: "my webpack Project",
-            template: './src/indexOne.html',
-            minify: {
-                collapseWhitespace: isProduct
-            }
-        }),
-        new CleanWebpackPlugin(),
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: path.resolve(__dirname, 'src/img/favicon.jpg'), to: path.resolve(__dirname, 'dist') },
-                //{ from: path.resolve(__dirname, 'src/styles/style.css'), to: path.resolve(__dirname, 'dist') } //<< < можно выкладиват несколько файлов
-            ],
-        }),
-        new MiniCssExtractPlugin({
-            //filename: '[name].[chunkhash].css'
-            filename: filename('css')
-        })
-    ],
+    plugins: plugins(),
     module: {
         rules: [
             {
@@ -128,10 +147,7 @@ module.exports = {
             {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader',
-                    options: babelOptions()
-                }
+                use: jsLoaders()
             },
             {
                 test: /\.tsx?$/,
@@ -156,10 +172,12 @@ module.exports = {
             }, */
         ]
     }
-};
-//console.log(isDev)
+}
+
 if (isDev) {
     console.log('>>> Режим Разработка <<<')
-} else {
+} else if (isProduct) {
     console.log('>>> Режим Production <<<')
+} else {
+    console.log('>>> Режим отоброжения Статистика <<<')
 }
